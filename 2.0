@@ -1,0 +1,146 @@
+@ECHO off
+REM /************************************************************************
+REM  *  -- O R C H A R D   I N F O R M A T I O N   S Y S T E M S   L t d -- *
+REM  ************************************************************************
+REM 
+REM Revision: 2.0
+REM Date: 15/02/2022
+REM Author: Ade Wright 
+REM 
+REM Description: OpenAccounts Configuration
+REM 
+REM Arguments:
+REM 
+REM Comments:
+REM 
+REM Copyright (c) 1998 Orchard Information Systems Limited
+REM ************************************************************************/
+
+SET SYSNAME=%1
+
+REM ==========================================================
+REM 
+REM Common Variables
+REM
+REM ==========================================================
+
+
+REM Determine which system parameters to use 
+
+IF "%SYSNAME%" == "status" GOTO status
+REM IF "%SYSNAME%" == "" GOTO live (commented out for Test System Creation AJW 29/11/00)
+IF "%SYSNAME%" == "LIVE" GOTO live
+IF "%SYSNAME%" == "live" GOTO live
+IF "%SYSNAME%" == "TEST" GOTO test
+IF "%SYSNAME%" == "test" GOTO test
+IF "%SYSNAME%" == "DEMO" GOTO demo
+IF "%SYSNAME%" == "demo" GOTO demo
+
+GOTO usage
+
+REM ==========================================================
+REM 
+REM Application Variables
+REM
+REM ==========================================================
+
+:live
+SET OAROOT=f:\oa
+SET OA=%OAROOT%
+SET OADBDIR=%OAROOT%\oa_data
+SET OABINDIR=f:\oa\bin
+SET OXAPDIR=d:\openacc\elive6090
+SET OAAPDIR=d:\openacc\oalive90
+SET OADBLIST=OALIVE90 OHLIVE90 OSLIVE90 eliv6090
+SET OATMP=d:\temp\LIVEOA
+SET PROTERMCAP=%OABINDIR%\protermcap
+SET PROPATH=%DLCRES%
+SET OASYSTEM=LIVE
+SET DLC=d:\OE117_x64
+SET DLCRES=%DLC%\tty\_progres
+SET DLCTK=%DLC%\dlctk
+SET PROMSGS=%DLC%\promsgs
+SET PPPPROVISION=d:\l\bin\utils\provision10
+SET PPPADMINPORT=20935
+SET OAPROVISION=f:\oa\bin\utils\provision11
+SET OAADMINPORT=40117
+SET OAVER=90
+SET OAEBISVER=eliv6090
+SET OAAPPLIST=AppSrvLive90 eliv6090
+SET OANUMLINESTRUNCATE=200
+SET PATH=%OABINDIR%;%DLC%\bin;%PATH%
+GOTO status
+
+:demo
+SET OAROOT=f:\oa
+SET OA=%OAROOT%
+SET OADBDIR=%OAROOT%\oa_data
+SET OABINDIR=f:\oa\bin
+SET OADBLIST=openacc openstrt openarch
+SET OATMP=d:\temp
+SET PROTERMCAP=%OABINDIR%\protermcap
+SET PROPATH=%DLCRES%
+SET OASYSTEM=DEMO
+SET DLC=d:\DLC9
+SET DLCRES=%DLC%\tty\_progres
+SET DLCTK=%DLC%\dlctk
+SET PROMSGS=%DLC%\promsgs
+SET PPPPROVISION=d:\l\bin\utils\provision9
+SET PATH=%OABINDIR%;%DLC%\bin;%PATH%
+GOTO status
+
+:test
+SET OAROOT=f:\testoa
+SET OA=%OAROOT%
+SET OADBDIR=%OAROOT%\oa_data
+SET OABINDIR=f:\testoa\bin
+SET OXAPDIR=d:\openacc\etst6090
+SET OAAPDIR=d:\openacc\oatest90
+SET OADBLIST=OATEST90 OHTEST90 OSTEST90 ETST6090
+SET OATMP=d:\temp\TESTOA
+SET PROTERMCAP=%OABINDIR%\protermcap
+SET PROPATH=%DLCRES%
+SET OASYSTEM=TEST
+SET DLC=d:\OE117_x64
+SET OAVER=90
+SET OAEBISVER=etst6090
+SET OAAPPLIST=AppSrvTest90 etst8000
+SET DLCRES=%DLC%\tty\_progres
+SET DLCTK=%DLC\dlctk
+SET PROMSGS=%DLC%\promsgs
+SET OAPROVISION=f:\testoa\bin\utils\provision11
+SET OAADMINPORT=40117
+SET OANUMLINESTRUNCATE=200
+SET PATH=%OABINDIR%;%DLC%\bin;%PATH%
+GOTO status
+
+:status
+IF "%OASYSTEM%" == "" GOTO nostatus
+TITLE OpenAccounts: %OASYSTEM%
+ECHO OA System configured for %OASYSTEM% in this session
+GOTO end
+
+:nostatus
+ECHO No OA System configured in this session.
+GOTO end
+
+REM ==========================================================
+REM 
+REM Usage 
+REM
+REM ==========================================================
+
+:usage
+ECHO OpenAccounts Configuration Command Line Utility $Revision: 1.1 $ 
+ECHO Usage:
+ECHO       oacfg [STATUS \ SYSTEMNAME] 
+ECHO.       
+ECHO WHERE [SYSTEMNAME} is LIVE; TEST (No system is selected if left blank)
+ECHO STATUS displays which system is currently configured
+GOTO end
+
+:pathset
+REM Set the path
+PATH=%OABINDIR%;%PATH%
+
+:end
